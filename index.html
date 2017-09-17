@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de" data-ng-app="clockCalendarApp">
+  <head>
+    <meta charset="utf-8">
+    <title>ClockCalendar</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Maven+Pro">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+  </head>
+  <body>
+
+    <div class="text-center" data-ng-controller="DateTimeCtrl">
+      <h2>{{now | date:'EEEE, dd. MMMM yyyy'}}</h2>
+      <h1 style="font-size: 6em">{{now | date:'HH:mm'}}</h1>
+    </div>
+
+    <div class="text-center" data-ng-controller="WeatherCtrl">
+      <p>
+        <span style="font-size: 3em;">{{weather.main.temp | number : 0}}°C</span>
+        <span style="font-size: 3em; padding-left:0.5em; padding-right:0.5em;"><i class="wi" data-ng-class="weather.weather[0].icon | convertToIcon" title="{{weather.weather[0].description}}"></i></span>
+        <span style="font-size: 3em;">{{weather.weather[0].main | translateWeatherGerman}}</span>
+      </p>
+      <p>
+        <span style="font-size: 2em; padding-right:0.5em;"><i class="wi wi-sunrise"></i> {{weather.sys.sunrise | date:'HH:mm'}}</span>
+        <span style="font-size: 2em"><i class="wi wi-sunset"></i> {{weather.sys.sunset | date:'HH:mm'}}</span>
+      </p>
+      <h4 data-ng-if="forecasts[0].rain"><b>Regenschirm nicht vergessen <i class="wi wi-umbrella"></i></b></h4>
+    </div>
+
+    <div class="row" data-ng-controller="CalendarCtrl">
+
+      <div class="col-sm-6">
+        <h4 data-ng-controller="WeatherCtrl">Heute <small class="pull-right"><i class="fa fa-long-arrow-up"></i> {{forecasts[0].temp.max | number : 0}} °C <i class="fa fa-long-arrow-down"></i> {{forecasts[0].temp.min | number : 0}} °C <i class="wi wi-umbrella" data-ng-class="forecasts[0].rain ? '' : 'wi-rotate-180'"></i></small></h4>
+        <table class="table">
+          <tr data-ng-repeat="event in todayEvents">
+            <td>
+              {{event.title}}
+            </td>
+            <td class="col-xs-1">
+              {{event.startDate | date:'HH:mm'}}
+            </td>
+            <td class="col-xs-1">
+              {{event.endDate | date:'HH:mm'}}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="col-sm-6">
+        <h4 data-ng-controller="WeatherCtrl">Morgen <small class="pull-right">{{forecasts[1].temp.min | number : 0}} °C / {{forecasts[1].temp.max | number : 0}} °C <i class="wi wi-umbrella" data-ng-class="forecasts[1].rain ? '' : 'wi-rotate-180'"></i></small></h4>
+        <table class="table">
+          <tr data-ng-repeat="event in tomorrowEvents">
+            <td>
+              {{event.title}}
+            </td>
+            <td class="col-xs-1">
+              {{event.startDate | date:'HH:mm'}}
+            </td>
+            <td class="col-xs-1">
+              {{event.endDate | date:'HH:mm'}}
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.5.9/angular-locale_de-de.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.2.2/ical.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/app.config.js"></script>
+
+  </body>
+</html>
